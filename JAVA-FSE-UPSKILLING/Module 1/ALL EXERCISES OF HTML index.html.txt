@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Local Community Event Portal</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f4f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 800px;
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    nav a {
+      margin: 10px;
+      text-decoration: none;
+      color: #0077cc;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    #welcomeBanner {
+      background-color: #0077cc;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+
+    .highlight {
+      background-color: yellow;
+      font-weight: bold;
+      padding: 2px 6px;
+    }
+
+    .event-img {
+      border: 2px solid black;
+      width: 100px;
+      height: 100px;
+      border-radius: 8px;
+    }
+
+    table {
+      margin: 20px auto;
+      border-collapse: collapse;
+    }
+
+    td, th {
+      padding: 10px;
+    }
+
+    form input, form select, form textarea, form button {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    form button {
+      background-color: #0077cc;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    form button:hover {
+      background-color: #005fa3;
+    }
+
+    video {
+      margin-top: 20px;
+    }
+
+    .box {
+      width: 150px;
+      height: 150px;
+      background-color: skyblue;
+      margin: 20px auto;
+      line-height: 150px;
+      color: white;
+      font-weight: bold;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#events">Events</a>
+      <a href="#contact">Contact</a>
+      <a href="help.html" target="_blank">Help</a>
+    </nav>
+
+    <div id="welcomeBanner">
+      Welcome <span class="highlight">Guest</span>! <span style="color: red; font-weight: bold;">Special Offer!</span>
+    </div>
+
+    <section id="home">
+      <h2>Home</h2>
+      <p>Welcome to the Local Community Event Portal!</p>
+    </section>
+
+    <section id="events">
+      <h2>Events</h2>
+
+      <table border="1">
+        <caption>Community Event Highlights</caption>
+        <tr>
+          <td><img src="img1.jpg" alt="Event 1" title="Event 1" class="event-img"></td>
+          <td><img src="img2.jpg" alt="Event 2" title="Event 2" class="event-img"></td>
+          <td><img src="img3.jpg" alt="Event 3" title="Event 3" class="event-img"></td>
+        </tr>
+        <tr>
+          <td><img src="img4.jpg" alt="Event 4" title="Event 4" class="event-img"></td>
+          <td><img src="img5.jpg" alt="Event 5" title="Event 5" class="event-img"></td>
+          <td><img src="img6.jpg" alt="Event 6" title="Event 6" class="event-img"></td>
+        </tr>
+      </table>
+
+      <h3>Register for an Event</h3>
+      <form onsubmit="showConfirmation(); return false;">
+        <input type="text" placeholder="Your Name" required autofocus>
+        <input type="email" placeholder="Your Email" required>
+        <input type="date" required>
+        <select id="eventType" onchange="savePreference()" required>
+          <option value="">Select Event Type</option>
+          <option value="sports">Sports</option>
+          <option value="music">Music</option>
+        </select>
+        <textarea placeholder="Message" required></textarea>
+        <input type="text" id="phone" placeholder="Phone Number" onblur="validatePhone()">
+        <div id="feeDisplay"></div>
+        <textarea id="feedback" onkeyup="countChars()" placeholder="Your feedback"></textarea>
+        <p>Characters: <span id="charCount">0</span></p>
+        <button type="submit">Register</button>
+        <output id="confirmationMsg"></output>
+      </form>
+
+      <video id="promoVideo" width="320" controls oncanplay="readyMsg()">
+        <source src="promo.mp4" type="video/mp4">
+      </video>
+      <p id="videoStatus"></p>
+
+      <button onclick="findNearby()">Find Nearby Events</button>
+      <p id="locationInfo"></p>
+    </section>
+
+    <section id="contact">
+      <h2>Contact Us</h2>
+      <p>Email: contact@communityevents.com</p>
+    </section>
+
+    <h3>Debugging Section</h3>
+    <div class="box" id="debugBox">Click Me</div>
+    <button onclick="triggerError()">Trigger Error</button>
+  </div>
+
+  <script>
+    console.log("Page Loaded");
+
+    document.getElementById("debugBox").addEventListener("click", function () {
+      console.log("Box clicked");
+      this.style.backgroundColor = getRandomColor();
+    });
+
+    function getRandomColor() {
+      const colors = ["red", "green", "blue", "orange"];
+      const index = Math.floor(Math.random() * colors.length);
+      return colors[index];
+    }
+
+    function triggerError() {
+      let num = undefined;
+      console.log(num.toUpperCase()); // Intentional error
+    }
+
+    function showConfirmation() {
+      document.getElementById("confirmationMsg").value = "Thank you for registering!";
+    }
+
+    function validatePhone() {
+      const phone = document.getElementById('phone').value;
+      if (!/^\d{10}$/.test(phone)) {
+        alert("Invalid phone number");
+      }
+    }
+
+    function countChars() {
+      const count = document.getElementById("feedback").value.length;
+      document.getElementById("charCount").innerText = count;
+    }
+
+    function readyMsg() {
+      document.getElementById('videoStatus').innerText = "Video ready to play!";
+    }
+
+    window.onbeforeunload = function() {
+      return "You have unsaved changes. Are you sure you want to leave?";
+    }
+
+    function savePreference() {
+      const selected = document.getElementById("eventType").value;
+      localStorage.setItem("eventType", selected);
+    }
+
+    window.onload = function () {
+      const type = localStorage.getItem("eventType");
+      if (type) document.getElementById("eventType").value = type;
+    }
+
+    function findNearby() {
+      if (!navigator.geolocation) {
+        document.getElementById("locationInfo").innerText = "Geolocation not supported.";
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const coords = pos.coords;
+          document.getElementById("locationInfo").innerText =
+            `Latitude: ${coords.latitude}, Longitude: ${coords.longitude}`;
+        },
+        (err) => {
+          document.getElementById("locationInfo").innerText = "Error: " + err.message;
+        },
+        { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+      );
+    }
+  </script>
+</body>
+</html>
